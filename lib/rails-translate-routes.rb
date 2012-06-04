@@ -233,9 +233,11 @@ class RailsTranslateRoutes
         new_helper_name = "#{old_name}_#{suffix}"
 
         ROUTE_HELPER_CONTAINER.each do |helper_container|
-          helper_container.send :define_method, new_helper_name do |*args|
-            send "#{old_name}_#{locale_suffix(I18n.locale)}_#{suffix}", *args
-          end
+					if I18n.locale != I18n.default_locale
+						helper_container.send :define_method, new_helper_name do |*args|
+							send "#{old_name}_#{locale_suffix(I18n.locale)}_#{suffix}", *args
+						end
+					end
         end
 
         new_helper_name.to_sym
